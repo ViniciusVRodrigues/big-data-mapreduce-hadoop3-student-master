@@ -30,7 +30,7 @@ public class WindTemp{
         Path input = new Path("in/forestfireinput.csv");
 
         // arquivo de saida
-        Path output = new Path("output/wind_temp_max_sem_combiner.txt");
+        Path output = new Path("output/wind_temp_max_com_combiner.txt");
 
         // criacao do job e seu nome
         Job j = new Job(c, "WindTemp");
@@ -49,7 +49,7 @@ public class WindTemp{
         //O combiner vai ser usado para fazer uma pré-agrupamento dos dados
         //Nessa tarefa ele vai fazer o mesmo trabalho do reduce
         //Ele é opcional, pode comentar essa linha para ver a diferença
-        //j.setCombinerClass(CombineForWindTemp.class);
+        j.setCombinerClass(CombineForWindTemp.class);
 
         //2. definir tipos de saídas
         j.setMapOutputKeyClass(Text.class);
@@ -72,14 +72,14 @@ public class WindTemp{
         public void map(LongWritable key, Text value, Context con)
                 throws IOException, InterruptedException {
             //entrada 7,5,mar,fri,86.2,26.2,94.3,5.1,8.2,51,6.7,0,0
-            //Mês (3), Temp (8), Vento(10)
+            //Mês (2), Temp (8), Vento(10)
 
             String linha = value.toString();
 
             String[] valores = linha.split(",");
 
             //Pegar os valores de mês, temperatura e vento
-            String month = valores[3];
+            String month = valores[2];
             float temp = Float.parseFloat(valores[8]);
             float wind = Float.parseFloat(valores[10]);
 
